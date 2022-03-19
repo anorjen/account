@@ -2,31 +2,37 @@ package ru.iteco.accountbank;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import ru.iteco.accountbank.model.AccountInfo;
 import ru.iteco.accountbank.service.*;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
+@EnableAspectJAutoProxy
 @ComponentScan
 @PropertySource("classpath:application.properties")
 public class AccountBankApplication {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext  applicationContext = new AnnotationConfigApplicationContext(AccountBankApplication.class);
-        homeworkOne(applicationContext);
+        homeworkTwo(applicationContext);
     }
 
-    private static void homeworkOne(AnnotationConfigApplicationContext  applicationContext) {
+    private static void homeworkTwo(AnnotationConfigApplicationContext  applicationContext) {
         Flow flow = applicationContext.getBean(Flow.class);
 
-        flow.run(1);
-        flow.run(2);
-        flow.run(2);
-        flow.run(3);
-        flow.run(4);
+        List<Integer> idList = Arrays.asList(1, 2, 2, 3, 4, 5);
+
+            for (Integer id : idList) {
+                try {
+                    flow.run(id);
+                } catch (Exception ex) {
+                    log.warn("Exception log:: {} with id {}", ex.getMessage(), id);
+                }
+            }
 
         applicationContext.close();
     }

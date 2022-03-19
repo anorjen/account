@@ -19,7 +19,11 @@ public class ExternalServiceImpl implements ExternalService {
     @Override
     @CacheResult
     public ExternalInfo getExternalInfo(Integer id) {
-        return map.get(id);
+        ExternalInfo externalInfo = map.get(id);
+        if (externalInfo == null) {
+            throw new RuntimeException("Not found");
+        }
+        return externalInfo;
     }
 
     @PostConstruct
