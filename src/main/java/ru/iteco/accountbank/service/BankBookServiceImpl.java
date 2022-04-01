@@ -1,6 +1,5 @@
 package ru.iteco.accountbank.service;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.iteco.accountbank.exception.BankBookException;
@@ -12,8 +11,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -96,11 +97,14 @@ public class BankBookServiceImpl implements BankBookService {
     }
 
     @Override
-    @SneakyThrows
     public void deleteByUserId(Integer userId) {
-        List<BankBookDto> bankBookDtoList = getByUserId(userId);
-        for (BankBookDto b : bankBookDtoList) {
-            bankBookDtoMap.remove(b.getId());
+        List<Integer> removeIds = bankBookDtoMap.values().stream()
+                                    .filter(i -> Objects.equals(i.getUserId(), userId))
+                                    .map(BankBookDto::getId)
+                                    .collect(Collectors.toList());
+
+        for (Integer b : removeIds) {
+            bankBookDtoMap.remove(b);
         }
     }
 }
