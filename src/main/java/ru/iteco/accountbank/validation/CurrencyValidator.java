@@ -1,16 +1,22 @@
 package ru.iteco.accountbank.validation;
 
-import java.util.Set;
+import ru.iteco.accountbank.repository.CurrencyRepository;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class CurrencyValidator implements ConstraintValidator<Currency, String> {
 
-    private static final Set<String> CURRENCY = Set.of("RUB", "EUR", "USD", "GBP");
+    private final CurrencyRepository currencyRepository;
+
+    public CurrencyValidator(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
+
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return CURRENCY.contains(value);
+        return currencyRepository.findByName(value) != null;
     }
 
 }

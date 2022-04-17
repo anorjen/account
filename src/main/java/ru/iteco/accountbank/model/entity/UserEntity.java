@@ -1,6 +1,8 @@
 package ru.iteco.accountbank.model.entity;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,6 +49,10 @@ public class UserEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private AddressEntity address;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user")
+    private Set<BankBookEntity> bankBooks = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
